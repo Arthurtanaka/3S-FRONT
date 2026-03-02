@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Material de Estudo - Lógica Proposicional</title>
+    
+    <!-- Ligação com o CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Material de Estudo Digital</h1>
+    <p>Lógica Proposicional</p>
+</header>
+
+<nav>
+    <a href="#conceitos">Conceitos</a>
+    <a href="#tabela">Tabela Verdade</a>
+    <a href="#avaliacao">Avaliação</a>
+</nav>
+
+<section id="conceitos">
+    <h2>Conceitos Básicos</h2>
+
+    <article>
+        <h3>O que é uma Proposição?</h3>
+        <p>Uma <strong>proposição</strong> é uma sentença declarativa que pode ser 
+        classificada como <mark>verdadeira</mark> ou <mark>falsa</mark>.</p>
+
+        <p>Exemplo:</p>
+        <ul>
+            <li>p: "2 + 2 = 4"</li>
+            <li>q: "O Brasil fica na Europa"</li>
+        </ul>
+    </article>
+
+    <article>
+        <h3>Conectivos Lógicos</h3>
+        <ol>
+            <li>Negação (¬)</li>
+            <li>Conjunção (∧)</li>
+            <li>Disjunção (∨)</li>
+            <li>Condicional (→)</li>
+            <li>Bicondicional (↔)</li>
+        </ol>
+    </article>
+
+    <aside>
+        <h4>Dica</h4>
+        <p>Se uma proposição composta for sempre verdadeira, ela é chamada de 
+        <strong>tautologia</strong>.</p>
+    </aside>
+</section>
+
+<section id="tabela">
+    <h2>Exemplo de Tabela Verdade</h2>
+
+    <table>
+        <tr>
+            <th>p</th>
+            <th>q</th>
+            <th>p ∧ q</th>
+        </tr>
+        <tr>
+            <td>V</td>
+            <td>V</td>
+            <td>V</td>
+        </tr>
+        <tr>
+            <td>V</td>
+            <td>F</td>
+            <td>F</td>
+        </tr>
+        <tr>
+            <td>F</td>
+            <td>V</td>
+            <td>F</td>
+        </tr>
+        <tr>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+        </tr>
+    </table>
+
+    <p>Para aprender mais, visite:
+        <a href="https://www.w3schools.com/html/" target="_blank">W3Schools HTML</a>
+    </p>
+</section>
+
+<section id="avaliacao">
+    <h2>Avaliação do Material</h2>
+
+    <form>
+        <fieldset>
+            <legend>Responda abaixo:</legend>
+
+            <label>Nome:</label><br>
+            <input type="text" required><br><br>
+
+            <label>Você entendeu o conteúdo?</label><br>
+            <input type="radio" name="entendeu"> Sim
+            <input type="radio" name="entendeu"> Parcialmente
+            <input type="radio" name="entendeu"> Não<br><br>
+
+            <label>Nível de dificuldade:</label><br>
+            <select>
+                <option>Fácil</option>
+                <option>Médio</option>
+                <option>Difícil</option>
+            </select><br><br>
+
+            <label>Comentário:</label><br>
+            <textarea rows="4" cols="40"></textarea><br><br>
+
+            <input type="submit" value="Enviar Avaliação">
+        </fieldset>
+    </form>
+</section>
+
+<footer>
+    <p>Desenvolvido por Arthur Tanaka</p>
+</footer>
+
+</body>
+</html>
