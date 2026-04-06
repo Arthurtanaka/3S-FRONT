@@ -1,0 +1,83 @@
+const cria = document.getElementById("b");
+const btn = document.getElementById("btn");
+
+const estados = {
+    normal: "b_n.png",
+    puto: "b_p.png",
+    morto: "b_d.png",
+    comendo: "b_c.png",
+    alimentado: "b_a.png"
+};
+
+let contador = 0;
+let intervalo = null;
+let time_click = null;
+
+function controlador() {
+    if (intervalo) clearInterval(intervalo);
+
+    intervalo = setInterval(() => {
+        contador++;
+
+        console.log("tempo:", contador);
+
+        if (contador >= 60) {
+            cria.src = estados.morto;
+        } 
+        else if (contador >= 30) {
+            cria.src = estados.puto;
+        } 
+        else {
+            cria.src = estados.normal;
+        }
+
+    }, 1000);
+}
+
+function alimentar() {
+
+    console.log("Comendo...");
+
+    cria.src = estados.comendo;
+    contador = 0;
+
+    if (time_click) clearTimeout(time_click);
+
+    time_click = setTimeout(() => {
+
+        cria.src = estados.alimentado;
+
+        setTimeout(() => {
+            cria.src = estados.normal;
+        }, 2000);
+
+    }, 1000);
+}
+
+btn.onclick = alimentar;
+
+
+const fundoDia = "bg.png";
+const fundoNoite = "bg_noite.png";
+
+let horas = 0;
+
+function atualizarFundo() {
+
+    setInterval(() => {
+
+        horas++;
+
+        if (horas >= 12) {
+            document.body.style.backgroundImage = `url('${fundoNoite}')`;
+        } else {
+            document.body.style.backgroundImage = `url('${fundoDia}')`;
+        }
+
+        if (horas >= 24) horas = 0;
+
+    }, 1000);
+}
+
+controlador();
+atualizarFundo();

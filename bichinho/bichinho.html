@@ -1,0 +1,49 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Meu Pet Virtual</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body style="
+    background-image: url('bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+"
+class="flex flex-col items-center justify-center min-h-screen gap-6">
+
+    <div class="flex items-center gap-4">
+
+        <div class="avatar">
+            <div class="w-16 rounded-full">
+                <img src="b_n.png"/>
+            </div>
+        </div>
+
+        <input 
+            type="text" 
+            placeholder="Nome do pet..." 
+            class="input input-bordered"
+        />
+    </div>
+
+    <img id="b" src="b_n.png" class="w-64"/>
+
+    <img 
+        id="btn" 
+        src="btn.png" 
+        class="w-32 cursor-pointer active:scale-95 transition"
+    />
+
+    <img 
+        src="ferlini.jpg"
+        style="position: fixed; bottom: 10px; right: 10px; width: 60px; opacity: 1;"
+    />
+
+</body>
+
+<script src="script.js"></script>
+</html>
