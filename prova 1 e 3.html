@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Prova Front-End</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f0f8ff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        nav {
+            background: #333;
+            padding: 10px;
+        }
+
+        nav a {
+            color: white;
+            font-weight: bold;
+            margin: 10px;
+            text-decoration: none;
+        }
+
+        .secao {
+            background-color: #ffffff;
+            margin: 20px;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        img {
+            margin-top: 10px;
+            max-width: 200px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="#organizacao">Organização</a>
+        <a href="#formato">Formato</a>
+        <a href="#impacto">Impacto</a>
+    </nav>
+
+    <div class="container mt-4">
+
+        <section id="organizacao" class="secao">
+            <h2>Organização e Sedes</h2>
+            <p>
+                A Copa do Mundo FIFA de 2026 será realizada nos Estados Unidos,
+                Canadá e México.
+            </p>
+        </section>
+
+        <section id="formato" class="secao">
+            <h2>Novo Formato</h2>
+            <p>
+                O torneio terá 48 seleções, aumentando a competitividade.
+            </p>
+        </section>
+
+        <section id="impacto" class="secao">
+            <h2>Impacto</h2>
+            <p>
+                Grande impacto econômico e cultural no mundo.
+            </p>
+        </section>
+        <div class="secao">
+            <button onclick="mostrarTabela()" class="btn btn-success">
+                Mostrar Tabela de Jogos
+            </button>
+        </div>
+
+        <div class="card mx-auto mt-4" style="width: 18rem;">
+            <img id="imagem" src="_vinicius_junior.png" class="card-img-top" alt="Jogador">
+
+            <div class="card-body">
+                <h5 id="nome" class="placeholder">Nome do jogador</h5>
+                <p id="data" class="placeholder">Data</p>
+                <p id="altura" class="placeholder">Altura</p>
+                <p id="posicao" class="placeholder">Posição</p>
+                <p id="rank" class="placeholder">Rank</p>
+
+                <button onclick="revelar()" class="btn btn-primary">
+                    Revelar
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function mostrarTabela() {
+            const img = document.createElement("img");
+            img.src = "Tabela_Jogos.png";
+            img.alt = "Tabela de Jogos";
+
+            document.body.appendChild(img);
+        }
+
+        function revelar() {
+
+            document.getElementById("imagem").src = "_vinicius_junior.png";
+
+            document.getElementById("nome").textContent =
+                "Vinícius José Paixão de Oliveira Júnior";
+
+            document.getElementById("data").textContent =
+                "12/07/2000 (25 anos)";
+
+            document.getElementById("altura").textContent =
+                "1,76 m";
+
+            document.getElementById("posicao").textContent =
+                "Ponta-esquerda / Atacante";
+
+            document.getElementById("rank").textContent =
+                "9,5";
+
+            const elementos = [
+                "nome", "data", "altura", "posicao", "rank"
+            ];
+
+            elementos.forEach(id => {
+                const el = document.getElementById(id);
+                el.classList.remove("placeholder");
+                el.classList.add("card-text");
+            });
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
