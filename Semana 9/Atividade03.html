@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Ex03 — Média Escolar</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 40px 20px; }
+        .card { background: white; border-radius: 8px; padding: 32px; width: 100%; max-width: 480px; border-top: 5px solid #e67e22; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        h2 { color: #e67e22; margin-bottom: 20px; }
+        label { display: block; font-size: 0.85rem; font-weight: bold; color: #555; margin-bottom: 6px; margin-top: 14px; }
+        input { width: 100%; padding: 10px 12px; border: 1.5px solid #ccc; border-radius: 6px; font-size: 1rem; outline: none; }
+        input:focus { border-color: #e67e22; }
+        .linha { display: flex; gap: 12px; }
+        .linha .campo { flex: 1; }
+        button { margin-top: 20px; width: 100%; padding: 11px; background: #2c3e50; color: white; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+        button:hover { background: #3d5166; }
+        .resultado { margin-top: 16px; padding: 12px 16px; border-radius: 6px; font-size: 0.95rem; display: none; }
+        .azul     { background: #eaf1fb; color: #1a5fa8; border: 1px solid #aac8ed; display: block; }
+        .verde    { background: #e8f5ee; color: #1a7a4a; border: 1px solid #a8dbc0; display: block; }
+        .vermelho { background: #fdecea; color: #c0392b; border: 1px solid #f5b7b1; display: block; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>Exercício 03: Média Escolar</h2>
+
+    <label>Nome do Aluno</label>
+    <input type="text" id="aluno-nome" placeholder="Digite o nome completo">
+
+    <div class="linha">
+        <div class="campo">
+            <label>Nota 1</label>
+            <input type="number" id="nota1" step="0.1" min="0" max="10" placeholder="0 a 10">
+        </div>
+        <div class="campo">
+            <label>Nota 2</label>
+            <input type="number" id="nota2" step="0.1" min="0" max="10" placeholder="0 a 10">
+        </div>
+        <div class="campo">
+            <label>Nota 3</label>
+            <input type="number" id="nota3" step="0.1" min="0" max="10" placeholder="0 a 10">
+        </div>
+    </div>
+
+    <button onclick="calcularMedia()">Calcular Média</button>
+    <div class="resultado" id="resultado"></div>
+</div>
+
+<script>
+function calcularMedia() {
+    var nome  = document.getElementById('aluno-nome').value;
+    var nota1 = Number(document.getElementById('nota1').value);
+    var nota2 = Number(document.getElementById('nota2').value);
+    var nota3 = Number(document.getElementById('nota3').value);
+    var resultado = document.getElementById('resultado');
+
+    // Valida nome
+    if (nome.trim() === '') {
+        resultado.textContent = '⚠️ Informe o nome do aluno.';
+        resultado.className = 'resultado vermelho';
+        return;
+    }
+
+    // Calcula a média simples das 3 notas
+    var media = (nota1 + nota2 + nota3) / 3;
+
+    // Decide a situação
+    if (media >= 7.0) {
+        resultado.textContent = '🎉 ' + nome + ' — Média: ' + media.toFixed(2) + ' → Aprovado(a)!';
+        resultado.className = 'resultado azul';
+
+    } else if (media >= 4.0) {
+        var falta = 10 - media;
+        resultado.textContent = '📝 ' + nome + ' — Média: ' + media.toFixed(2) + ' → Exame Final. Falta ' + falta.toFixed(2) + ' para chegar a 10.';
+        resultado.className = 'resultado verde';
+
+    } else {
+        resultado.textContent = '❌ ' + nome + ' — Média: ' + media.toFixed(2) + ' → Reprovado(a).';
+        resultado.className = 'resultado vermelho';
+    }
+}
+</script>
+</body>
+</html>

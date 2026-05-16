@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Ex04 — Taxas Infinity Bank</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 40px 20px; }
+        .card { background: white; border-radius: 8px; padding: 32px; width: 100%; max-width: 480px; border-top: 5px solid #e67e22; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        h2 { color: #e67e22; margin-bottom: 20px; }
+        label { display: block; font-size: 0.85rem; font-weight: bold; color: #555; margin-bottom: 6px; margin-top: 14px; }
+        input, select { width: 100%; padding: 10px 12px; border: 1.5px solid #ccc; border-radius: 6px; font-size: 1rem; outline: none; }
+        input:focus, select:focus { border-color: #e67e22; }
+        button { margin-top: 20px; width: 100%; padding: 11px; background: #2c3e50; color: white; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+        button:hover { background: #3d5166; }
+        .resultado { margin-top: 16px; padding: 12px 16px; border-radius: 6px; font-size: 0.95rem; line-height: 1.7; display: none; }
+        .cinza    { background: #f5f5f5; color: #333; border: 1px solid #ddd; display: block; }
+        .vermelho { background: #fdecea; color: #c0392b; border: 1px solid #f5b7b1; display: block; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>Exercício 04: Taxas Infinity Bank</h2>
+
+    <label>Bandeira do Cartão</label>
+    <select id="bandeira">
+        <option value="">Selecione a bandeira...</option>
+        <option value="visa">Visa (2%)</option>
+        <option value="master">Mastercard (1,85%)</option>
+        <option value="elo">Elo (3%)</option>
+    </select>
+
+    <label>Valor da Venda (R$)</label>
+    <input type="number" id="valor-venda" min="0" step="0.01" placeholder="Ex: 500.00">
+
+    <label>Número de Parcelas</label>
+    <input type="number" id="parcelas" min="1" max="12" placeholder="1 a 12">
+
+    <button onclick="calcularTaxas()">Calcular</button>
+    <div class="resultado" id="resultado"></div>
+</div>
+
+<script>
+function calcularTaxas() {
+    var bandeira = document.getElementById('bandeira').value;
+    var venda    = Number(document.getElementById('valor-venda').value);
+    var parcelas = Number(document.getElementById('parcelas').value);
+    var resultado = document.getElementById('resultado');
+
+    // Valida os campos
+    if (bandeira === '' || venda <= 0 || parcelas < 1) {
+        resultado.textContent = '⚠️ Preencha todos os campos corretamente.';
+        resultado.className = 'resultado vermelho';
+        return;
+    }
+
+    // Define a taxa da bandeira com switch
+    var taxaBandeira = 0;
+    switch (bandeira) {
+        case 'visa':
+            taxaBandeira = 0.02;    // 2%
+            break;
+        case 'master':
+            taxaBandeira = 0.0185;  // 1,85%
+            break;
+        case 'elo':
+            taxaBandeira = 0.03;    // 3%
+            break;
+    }
+
+    // Cálculos
+    var valorTaxa    = venda * taxaBandeira;
+    var jurosTotais  = venda * (0.0035 * parcelas);  // 0,35% ao mês × nº de parcelas
+    var taxaMensal   = 12.50 * parcelas;             // R$ 12,50 por mês
+    var valorTotal   = venda + valorTaxa + jurosTotais + taxaMensal;
+    var valorParcela = valorTotal / parcelas;
+
+    resultado.innerHTML =
+        '💳 Bandeira: <strong>' + bandeira + '</strong> — ' + parcelas + 'x<br>' +
+        '• Taxa da Bandeira: R$ ' + valorTaxa.toFixed(2) + '<br>' +
+        '• Juros (0,35% × ' + parcelas + ' parcelas): R$ ' + jurosTotais.toFixed(2) + '<br>' +
+        '• Taxa Mensal (R$ 12,50 × ' + parcelas + '): R$ ' + taxaMensal.toFixed(2) + '<br>' +
+        '• Valor Total: R$ ' + valorTotal.toFixed(2) + '<br>' +
+        '<strong>• Valor por Parcela: R$ ' + valorParcela.toFixed(2) + '</strong>';
+
+    resultado.className = 'resultado cinza';
+}
+</script>
+</body>
+</html>

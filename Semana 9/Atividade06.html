@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Ex06 — Crédito para Festas & Eventos</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 40px 20px; }
+        .card { background: white; border-radius: 8px; padding: 32px; width: 100%; max-width: 480px; border-top: 5px solid #e67e22; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        h2 { color: #e67e22; margin-bottom: 20px; }
+        label { display: block; font-size: 0.85rem; font-weight: bold; color: #555; margin-bottom: 6px; margin-top: 14px; }
+        input, select { width: 100%; padding: 10px 12px; border: 1.5px solid #ccc; border-radius: 6px; font-size: 1rem; outline: none; }
+        input:focus, select:focus { border-color: #e67e22; }
+        button { margin-top: 20px; width: 100%; padding: 11px; background: #2c3e50; color: white; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+        button:hover { background: #3d5166; }
+        .resultado { margin-top: 16px; padding: 12px 16px; border-radius: 6px; font-size: 0.95rem; line-height: 1.7; display: none; }
+        .cinza    { background: #f5f5f5; color: #333; border: 1px solid #ddd; display: block; }
+        .vermelho { background: #fdecea; color: #c0392b; border: 1px solid #f5b7b1; display: block; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>Exercício 06: Crédito para Festas & Eventos</h2>
+
+    <label>Pacote</label>
+    <select id="pacote">
+        <option value="">Selecione o pacote...</option>
+        <option value="50">Standard — R$ 50,00 por pessoa</option>
+        <option value="80">Premium — R$ 80,00 por pessoa</option>
+        <option value="120">Infinity Deluxe — R$ 120,00 por pessoa</option>
+    </select>
+
+    <label>Quantidade de Pessoas</label>
+    <input type="number" id="qtd-pessoas" min="1" placeholder="Ex: 80">
+
+    <button onclick="calcularEvento()">Calcular Orçamento</button>
+    <div class="resultado" id="resultado"></div>
+</div>
+
+<script>
+function calcularEvento() {
+    var pacote = Number(document.getElementById('pacote').value);
+    var qtd    = Number(document.getElementById('qtd-pessoas').value);
+    var resultado = document.getElementById('resultado');
+
+    // Valida os campos
+    if (pacote === 0 || isNaN(qtd) || qtd < 1) {
+        resultado.textContent = '⚠️ Selecione o pacote e informe a quantidade de pessoas.';
+        resultado.className = 'resultado vermelho';
+        return;
+    }
+
+    // 1. Custo bruto = preço por pessoa × número de pessoas
+    var custoBruto = pacote * qtd;
+
+    // 2. Taxa de serviço de 10% sobre o custo bruto
+    var taxaServico = custoBruto * 0.10;
+
+    // 3. Subtotal antes do desconto
+    var subtotal = custoBruto + taxaServico;
+
+    // 4. Desconto de 5% se tiver mais de 100 pessoas
+    var desconto = 0;
+    if (qtd > 100) {
+        desconto = subtotal * 0.05;
+    }
+
+    // 5. Total final
+    var totalFinal = subtotal - desconto;
+
+    // Nome do pacote para exibição
+    var nomePacote = '';
+    if (pacote === 50)  nomePacote = 'Standard';
+    if (pacote === 80)  nomePacote = 'Premium';
+    if (pacote === 120) nomePacote = 'Infinity Deluxe';
+
+    // Texto do desconto
+    var textoDesconto = '';
+    if (qtd > 100) {
+        textoDesconto = ' — aplicado ✅';
+    } else {
+        textoDesconto = ' — não se aplica (menos de 100 pessoas)';
+    }
+
+    resultado.innerHTML =
+        '🎉 Pacote <strong>' + nomePacote + '</strong> para ' + qtd + ' pessoa(s)<br>' +
+        '• Custo Bruto (R$ ' + pacote.toFixed(2) + ' × ' + qtd + '): R$ ' + custoBruto.toFixed(2) + '<br>' +
+        '• Taxa de Serviço (10%): R$ ' + taxaServico.toFixed(2) + '<br>' +
+        '• Desconto (5%' + textoDesconto + '): − R$ ' + desconto.toFixed(2) + '<br>' +
+        '<strong>• Total Final: R$ ' + totalFinal.toFixed(2) + '</strong>';
+
+    resultado.className = 'resultado cinza';
+}
+</script>
+</body>
+</html>

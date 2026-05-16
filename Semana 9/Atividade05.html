@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Ex05 — Lista de Convidados VIP</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 40px 20px; }
+        .card { background: white; border-radius: 8px; padding: 32px; width: 100%; max-width: 520px; border-top: 5px solid #e67e22; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        h2 { color: #e67e22; margin-bottom: 20px; }
+        label { display: block; font-size: 0.85rem; font-weight: bold; color: #555; margin-bottom: 6px; }
+        input { flex: 1; padding: 10px 12px; border: 1.5px solid #ccc; border-radius: 6px; font-size: 1rem; outline: none; width: 100%; }
+        input:focus { border-color: #e67e22; }
+        .linha-adicionar { display: flex; gap: 10px; align-items: center; }
+        button { padding: 10px 16px; background: #2c3e50; color: white; border: none; border-radius: 6px; font-size: 0.9rem; cursor: pointer; white-space: nowrap; }
+        button:hover { background: #3d5166; }
+        .btn-adicionar { background: #e67e22; }
+        .btn-adicionar:hover { background: #cf6d17; }
+
+        /* Lista */
+        ul { list-style: none; margin-top: 20px; padding: 0; }
+        li { display: flex; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 1px solid #eee; }
+        li:last-child { border-bottom: none; }
+
+        .nome { flex: 1; font-size: 0.95rem; }
+        .nome.riscado { text-decoration: line-through; color: #aaa; }
+
+        .btn-sm { padding: 5px 10px; font-size: 0.78rem; border-radius: 5px; }
+        .btn-verde    { background: #1a7a4a; }
+        .btn-azul     { background: #1a5fa8; }
+        .btn-vermelho { background: #c0392b; }
+
+        /* Contador */
+        .contador { margin-top: 16px; padding: 12px 16px; border-radius: 6px; background: #eaf1fb; color: #1a5fa8; border: 1px solid #aac8ed; font-size: 0.92rem; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>Exercício 05: Lista de Convidados VIP</h2>
+
+    <label>Nome do Convidado</label>
+    <div class="linha-adicionar">
+        <input type="text" id="input-convidado" placeholder="Digite o nome..." onkeydown="teclaEnter(event)">
+        <button class="btn-adicionar" onclick="adicionarConvidado()">+ Adicionar</button>
+    </div>
+
+    <ul id="lista-convidados"></ul>
+
+    <div class="contador" id="contador">
+        Total: <strong>0</strong> convidado(s)
+    </div>
+</div>
+
+<script>
+// Array que guarda todos os convidados
+var convidados = [];
+
+// Permite pressionar Enter para adicionar
+function teclaEnter(event) {
+    if (event.key === 'Enter') {
+        adicionarConvidado();
+    }
+}
+
+function adicionarConvidado() {
+    var input = document.getElementById('input-convidado');
+    var nome  = input.value.trim(); // trim() remove espaços das bordas
+
+    if (nome === '') return; // não adiciona se estiver vazio
+
+    // Objeto representando o convidado
+    var novoConvidado = { nome: nome, presente: false };
+    convidados.push(novoConvidado);
+
+    input.value = ''; // limpa o campo
+    renderizarLista();
+}
+
+function renderizarLista() {
+    var ul = document.getElementById('lista-convidados');
+    ul.innerHTML = ''; // limpa a lista antes de redesenhar
+
+    for (var i = 0; i < convidados.length; i++) {
+        var c = convidados[i];
+
+        var li = document.createElement('li');
+
+        // Span com o nome — risca se já chegou
+        var spanNome = document.createElement('span');
+        spanNome.textContent = c.nome;
+        if (c.presente) {
+            spanNome.className = 'nome riscado';
+        } else {
+            spanNome.className = 'nome';
+        }
+
+        // Botão Chegou / Desfazer
+        var btnChegou = document.createElement('button');
+        btnChegou.className = 'btn-sm btn-verde';
+        btnChegou.textContent = c.presente ? '↩ Desfazer' : '✓ Chegou';
+        btnChegou.setAttribute('data-index', i);
+        btnChegou.onclick = function() {
+            var idx = Number(this.getAttribute('data-index'));
+            convidados[idx].presente = !convidados[idx].presente;
+            renderizarLista();
+        };
+
+        // Botão Editar
+        var btnEditar = document.createElement('button');
+        btnEditar.className = 'btn-sm btn-azul';
+        btnEditar.textContent = '✎ Editar';
+        btnEditar.setAttribute('data-index', i);
+        btnEditar.onclick = function() {
+            var idx = Number(this.getAttribute('data-index'));
+            var novoNome = prompt('Novo nome:', convidados[idx].nome);
+            if (novoNome !== null && novoNome.trim() !== '') {
+                convidados[idx].nome = novoNome.trim();
+                renderizarLista();
+            }
+        };
+
+        // Botão Excluir
+        var btnExcluir = document.createElement('button');
+        btnExcluir.className = 'btn-sm btn-vermelho';
+        btnExcluir.textContent = '✕ Excluir';
+        btnExcluir.setAttribute('data-index', i);
+        btnExcluir.onclick = function() {
+            var idx = Number(this.getAttribute('data-index'));
+            convidados.splice(idx, 1); // remove 1 item no índice idx
+            renderizarLista();
+        };
+
+        li.appendChild(spanNome);
+        li.appendChild(btnChegou);
+        li.appendChild(btnEditar);
+        li.appendChild(btnExcluir);
+        ul.appendChild(li);
+    }
+
+    // Conta quantos já chegaram
+    var presentes = 0;
+    for (var i = 0; i < convidados.length; i++) {
+        if (convidados[i].presente) {
+            presentes++;
+        }
+    }
+
+    document.getElementById('contador').innerHTML =
+        'Total: <strong>' + convidados.length + '</strong> convidado(s) — ' +
+        '<strong>' + presentes + '</strong> presente(s).';
+}
+</script>
+</body>
+</html>

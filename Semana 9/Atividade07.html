@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Ex07 — Validador de Cartão</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 40px 20px; }
+        .card { background: white; border-radius: 8px; padding: 32px; width: 100%; max-width: 480px; border-top: 5px solid #e67e22; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        h2 { color: #e67e22; margin-bottom: 20px; }
+        label { display: block; font-size: 0.85rem; font-weight: bold; color: #555; margin-bottom: 6px; }
+        input { width: 100%; padding: 10px 12px; border: 1.5px solid #ccc; border-radius: 6px; font-size: 1.1rem; outline: none; letter-spacing: 2px; }
+        input:focus { border-color: #e67e22; }
+        button { margin-top: 16px; width: 100%; padding: 11px; background: #2c3e50; color: white; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+        button:hover { background: #3d5166; }
+
+        /* Painel de resultado */
+        #painel { display: none; margin-top: 20px; border: 1px solid #ccc; border-radius: 8px; overflow: hidden; }
+        .painel-cabecalho { background: #2c3e50; color: white; padding: 10px 16px; font-weight: bold; }
+        .painel-corpo { display: flex; flex-wrap: wrap; gap: 16px; padding: 16px; }
+        .painel-item { flex: 1; min-width: 140px; }
+        .painel-item label { margin-top: 0; color: #888; font-size: 0.78rem; }
+        .painel-valor { font-size: 1rem; font-weight: bold; color: #333; }
+        .valido   { color: #1a7a4a; }
+        .invalido { color: #c0392b; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>Exercício 07: Validador de Cartão</h2>
+
+    <label>Número do Cartão (até 16 dígitos)</label>
+    <input type="text" id="card-input" placeholder="0000 0000 0000 0000" maxlength="19">
+
+    <button onclick="analisarCartao()">Analisar Cartão</button>
+
+    <div id="painel">
+        <div class="painel-cabecalho">📋 Painel de Informações</div>
+        <div class="painel-corpo">
+            <div class="painel-item">
+                <label>Status</label>
+                <div class="painel-valor" id="p-status">—</div>
+            </div>
+            <div class="painel-item">
+                <label>Bandeira</label>
+                <div class="painel-valor" id="p-bandeira">—</div>
+            </div>
+            <div class="painel-item">
+                <label>Setor</label>
+                <div class="painel-valor" id="p-setor">—</div>
+            </div>
+            <div class="painel-item">
+                <label>Banco Emissor</label>
+                <div class="painel-valor" id="p-banco">—</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Formata o número com espaço a cada 4 dígitos enquanto o usuário digita
+document.getElementById('card-input').addEventListener('input', function() {
+    var soNumeros = '';
+
+    // Remove tudo que não for dígito
+    for (var i = 0; i < this.value.length; i++) {
+        if (this.value[i] >= '0' && this.value[i] <= '9') {
+            soNumeros += this.value[i];
+        }
+    }
+
+    // Limita a 16 dígitos
+    if (soNumeros.length > 16) {
+        soNumeros = soNumeros.substring(0, 16);
+    }
+
+    // Insere espaço a cada 4 dígitos
+    var formatado = '';
+    for (var i = 0; i < soNumeros.length; i++) {
+        if (i > 0 && i % 4 === 0) {
+            formatado += ' ';
+        }
+        formatado += soNumeros[i];
+    }
+
+    this.value = formatado;
+});
+
+
+function analisarCartao() {
+    var input = document.getElementById('card-input').value;
+
+    // Remove espaços e guarda só os números
+    var numero = '';
+    for (var i = 0; i < input.length; i++) {
+        if (input[i] >= '0' && input[i] <= '9') {
+            numero += input[i];
+        }
+    }
+
+    // Mostra o painel
+    var painel = document.getElementById('painel');
+    painel.style.display = 'block';
+
+    // Verifica se o tamanho está entre 13 e 16
+    if (numero.length < 13 || numero.length > 16) {
+        document.getElementById('p-status').textContent   = '⚠️ Tamanho inválido';
+        document.getElementById('p-status').className     = 'painel-valor invalido';
+        document.getElementById('p-bandeira').textContent = '—';
+        document.getElementById('p-setor').textContent    = '—';
+        document.getElementById('p-banco').textContent    = 'Use entre 13 e 16 dígitos';
+        return;
+    }
+
+    // ── Algoritmo de Luhn ──
+    // Percorre os dígitos da direita para a esquerda.
+    // Nos dígitos de posição PAR (a partir do fim), multiplica por 2.
+    // Se o resultado for maior que 9, subtrai 9.
+    // Soma tudo. Se o total for divisível por 10, o número é válido.
+    var soma = 0;
+    for (var i = numero.length - 1; i >= 0; i--) {
+        var digito = Number(numero[i]);
+        var posicaoAPartirDoFim = numero.length - 1 - i;
+
+        if (posicaoAPartirDoFim % 2 === 1) {
+            digito = digito * 2;
+            if (digito > 9) {
+                digito = digito - 9;
+            }
+        }
+
+        soma += digito;
+    }
+
+    var valido = (soma % 10 === 0);
+
+    // ── Identifica a bandeira pelo primeiro dígito ──
+    var bandeira = 'Desconhecida';
+    if (numero[0] === '4') {
+        bandeira = 'Visa';
+    } else if (numero[0] === '5') {
+        bandeira = 'Mastercard';
+    } else if (numero[0] === '3' && (numero[1] === '4' || numero[1] === '7')) {
+        bandeira = 'American Express';
+    } else if (numero[0] === '6') {
+        bandeira = 'Elo / Discover';
+    } else if (numero[0] === '3') {
+        bandeira = 'Diners Club';
+    }
+
+    // ── Identifica o setor pelo 1º dígito (padrão IIN/BIN) ──
+    var setor = 'Não identificado';
+    if (numero[0] === '1') setor = 'Companhias Aéreas';
+    if (numero[0] === '2') setor = 'Aéreas / Financeiro';
+    if (numero[0] === '3') setor = 'Viagens e Entretenimento';
+    if (numero[0] === '4') setor = 'Bancos e Financeiras';
+    if (numero[0] === '5') setor = 'Bancos e Financeiras';
+    if (numero[0] === '6') setor = 'Mercadorias e Bancos';
+    if (numero[0] === '7') setor = 'Petróleo e Combustíveis';
+    if (numero[0] === '8') setor = 'Saúde e Telecom';
+    if (numero[0] === '9') setor = 'Governo / Serviços Públicos';
+
+    // ── Identifica o banco pelos dois primeiros dígitos ──
+    var d1 = numero[0];
+    var d2 = numero[1];
+    var banco = 'Emissor não identificado';
+
+    if (d1 === '4')                        banco = 'Visa International';
+    if (d1 === '5' && d2 === '1')          banco = 'Banco do Brasil / Mastercard';
+    if (d1 === '5' && d2 === '2')          banco = 'Banco do Brasil / Mastercard';
+    if (d1 === '5' && d2 === '3')          banco = 'Bradesco / Mastercard';
+    if (d1 === '5' && d2 === '4')          banco = 'Bradesco / Mastercard';
+    if (d1 === '5' && d2 === '5')          banco = 'Itaú / Mastercard';
+    if (d1 === '4' && d2 === '5')          banco = 'Nubank';
+    if (d1 === '4' && d2 === '0')          banco = 'Caixa Econômica Federal';
+
+    // ── Exibe os resultados no painel ──
+    var statusEl = document.getElementById('p-status');
+    if (valido) {
+        statusEl.textContent = '✅ Válido';
+        statusEl.className   = 'painel-valor valido';
+    } else {
+        statusEl.textContent = '❌ Inválido';
+        statusEl.className   = 'painel-valor invalido';
+    }
+
+    document.getElementById('p-bandeira').textContent = bandeira;
+    document.getElementById('p-setor').textContent    = setor;
+    document.getElementById('p-banco').textContent    = banco;
+}
+</script>
+</body>
+</html>
