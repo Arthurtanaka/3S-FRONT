@@ -1,0 +1,22 @@
+Como o professor utilizou o **CodePen** durante a aula e mostrou exemplos separados em HTML, CSS e JavaScript/React, vou montar o tutorial nesse formato para você poder copiar e colar diretamente no CodePen. O material da aula inclusive menciona configurar o preprocessador JavaScript para **Babel**. 
+
+# 1. Criando o Projeto no CodePen
+
+1. Acesse:
+   [CodePen](https://codepen.io/pen/)
+
+2. Clique na engrenagem ⚙️ da aba JavaScript.
+
+3. Configure:
+
+```text
+JavaScript Preprocessor:
+Babel
+```
+
+4. Adicione os pacotes:
+
+```text
+react
+react-dom
+```
